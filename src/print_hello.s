@@ -8,7 +8,7 @@ SECTION .text
 print_hello:
     mov rax, 1
     mov rdi, 1
-    mov rsi, hello
+    lea rsi, [rel hello]
     mov rdx, helloLen
     syscall
     ret

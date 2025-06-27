@@ -1,13 +1,19 @@
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/27 13:39:31 by ehosta            #+#    #+#             */
+/*   Updated: 2025/06/27 13:39:32 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define COLOR_RED "\e[38;2;255;0;0m"
-#define COLOR_RESET "\e[0m"
-
-extern void print_hello(void);
+#include "testing.h"
 
 int	main(void)
 {
-	printf(COLOR_RED "print_hello" COLOR_RESET "\n");
-	fflush(stdin);
+	display_title();
 	print_hello();
 }

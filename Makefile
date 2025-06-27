@@ -6,7 +6,19 @@ override SOURCE			:=	$(addprefix $(SOURCE_DIR), $(addsuffix .s, $(SOURCE_FILES))
 
 BUILD_DIR		:=	.dist/
 override OBJ	:=	$(patsubst $(SOURCE_DIR)%.s, $(BUILD_DIR)%.o, $(SOURCE))
-override DIRS	:=	$(sort $(dir $(NAME) $(OBJ)))
+
+TESTING_NAME	:=	libasm_tests
+
+override TESTING_DIR	:=	testing/
+TESTING_HEADERS			:=	$(addprefix $(TESTING_DIR), $(addsuffix .h, testing))
+TESTING_FILES			:=	main utils
+override TESTING		:=	$(addprefix $(TESTING_DIR), $(addsuffix .c, $(TESTING_FILES)))
+
+TESTING_BUILD_DIR		:=	.tests/
+override TESTING_OBJ	:=	$(patsubst $(TESTING_DIR)%.c, $(TESTING_BUILD_DIR)%.o, $(TESTING))
+override TESTING_DEPS	:=	$(patsubst %.o, %.d, $(TESTING_OBJ))
+
+override DIRS	:=	$(sort $(dir $(NAME) $(OBJ) $(TESTING_NAME) $(TESTING_BUILD_DIR) $(TESTING_DEPS)))
 
 ASM			:=	nasm
 AR			:=	ar
@@ -14,8 +26,6 @@ ASMFLAGS	:=	-f elf64
 ARFLAGS		:=	rcs
 LDFLAGS		:=
 RM			:=	rm -rf
-VG			:=	valgrind
-VGFLAGS		:=	--leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes
 
 .PHONY: all
 all: $(NAME)
@@ -32,14 +42,6 @@ $(DIRS):
 .PHONY: bonus
 bonus: all
 
-.PHONY: clean
-clean:
-	$(RM) $(BUILD_DIR)
-
-.PHONY: fclean
-fclean: clean
-	$(RM) $(NAME)
-
 .PHONY: re
 re: fclean
 	$(MAKE)
@@ -49,38 +51,25 @@ re: fclean
 # It tests everything of the libasm and prints everything.
 # ---------------------------------------------------------------------------- #
 
-TESTING_NAME	:=	$(TESTING_DIR)libasm_tests
-
-override TESTING_DIR	:=	testing/
-TESTING_HEADERS			:=	$(addsuffix .h, testing)
-TESTING_FILES			:=	main
-override TESTING		:=	$(addprefix $(TESTING_DIR), $(addsuffix .c, $(TESTING_FILES)))
-
-TESTING_BUILD_DIR		:=	$(TESTING_DIR).dist
-override TESTING_OBJ	:=	$(patsubst %.c, $(TESTING_BUILD_DIR)%.o, $(TESTING))
-override TESTING_DEPS	:=	$(patsubst %.o, %.d, $(TESTING_OBJ))
-override TESTING_DIRS	:=	$(sort $(dir $(TESTING_NAME) $(LIBASM_TESTS) $(DEPS)))
-
 CC			:=	gcc
-CFLAGS		:=	-Wall -Wextra -Werror -MD -g3
+CFLAGS		:=	-Wall -Wextra -Werror -g3
+VG			:=	valgrind
+VGFLAGS		:=	--leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes
 
 .PHONY: tests
-tests: $(TESTING_NAME)
+tests: all $(TESTING_NAME)
 
 $(TESTING_NAME): $(TESTING_OBJ) $(NAME)
 	$(CC) $(CFLAGS) $(TESTING_OBJ) $(NAME) -o $(TESTING_NAME)
 
-$(TESTING_BUILD_DIR)%.o: $(TESTING_DIR)%.c Makefile $(TESTING_HEADERS) | $(TESTING_DIRS)
+$(TESTING_BUILD_DIR)%.o: $(TESTING_DIR)%.c Makefile $(TESTING_HEADERS) | $(DIRS)
 	$(CC) $(CFLAGS) -c -I$(TESTING_DIR) $< -o $@
-
-$(TESTING_DIRS):
-	@mkdir -p $@
 
 .PHONY: run
 run:
 	@clear
 	@$(MAKE) bonus
-	@$(MAKE) compile
+	@$(MAKE) tests
 	@clear
 	@./libasm_tests
 
@@ -88,8 +77,20 @@ run:
 vg:
 	@clear
 	@$(MAKE) bonus
-	@$(MAKE) compile
+	@$(MAKE) tests
 	@clear
 	$(VG) $(VGFLAGS) ./libasm_tests
 
--include $(DEPS)
+.PHONY: norm
+norm:
+	norminette $(TESTING_DIR)
+
+.PHONY: clean
+clean:
+	$(RM) $(BUILD_DIR)
+	$(RM) $(TESTING_BUILD_DIR)
+
+.PHONY: fclean
+fclean: clean
+	$(RM) $(NAME)
+	$(RM) $(TESTING_NAME)
