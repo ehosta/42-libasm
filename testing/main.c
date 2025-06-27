@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 13:39:31 by ehosta            #+#    #+#             */
-/*   Updated: 2025/06/27 13:39:32 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:55:02 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,6 @@
 int	main(void)
 {
 	display_title();
-	print_hello();
+	display_subtitle("Fct: print_hello.s");
+	assert(print_hello_test());
 }

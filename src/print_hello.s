@@ -6,9 +6,9 @@ helloLen:  equ $ - hello
 
 SECTION .text
 print_hello:
-    mov rax, 1
-    mov rdi, 1
-    lea rsi, [rel hello]
-    mov rdx, helloLen
-    syscall
-    ret
+	mov rax, 1
+	mov rdi, 1
+	lea rsi, [rel hello]
+	mov rdx, helloLen
+	syscall
+	ret

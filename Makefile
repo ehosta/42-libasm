@@ -11,7 +11,7 @@ TESTING_NAME	:=	libasm_tests
 
 override TESTING_DIR	:=	testing/
 TESTING_HEADERS			:=	$(addprefix $(TESTING_DIR), $(addsuffix .h, testing))
-TESTING_FILES			:=	main utils
+TESTING_FILES			:=	$(addprefix fct/, print_hello) main utils
 override TESTING		:=	$(addprefix $(TESTING_DIR), $(addsuffix .c, $(TESTING_FILES)))
 
 TESTING_BUILD_DIR		:=	.tests/
