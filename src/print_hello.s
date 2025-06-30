@@ -1,10 +1,10 @@
 global print_hello
 
-SECTION .data
-hello:     db 'Hello world!', 10
-helloLen:  equ $ - hello
+section .data
+hello:		db 'Hello world!', 10
+helloLen:	equ $ - hello
 
-SECTION .text
+section .text
 print_hello:
 	mov rax, 1
 	mov rdi, 1
@@ -12,3 +12,4 @@ print_hello:
 	mov rdx, helloLen
 	syscall
 	ret
+

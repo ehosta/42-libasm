@@ -1,7 +1,7 @@
 NAME	:=	libasm.a
 
 override SOURCE_DIR		:=	src/
-SOURCE_FILES			:=	print_hello
+SOURCE_FILES			:=	ft_strlen print_hello
 override SOURCE			:=	$(addprefix $(SOURCE_DIR), $(addsuffix .s, $(SOURCE_FILES)))
 
 BUILD_DIR		:=	.dist/
@@ -11,7 +11,9 @@ TESTING_NAME	:=	libasm_tests
 
 override TESTING_DIR	:=	testing/
 TESTING_HEADERS			:=	$(addprefix $(TESTING_DIR), $(addsuffix .h, testing))
-TESTING_FILES			:=	$(addprefix fct/, print_hello) main utils
+TESTING_FILES			:=	$(addprefix fct/, ft_strlen print_hello) \
+							$(addprefix utils/, random_seq) \
+							main
 override TESTING		:=	$(addprefix $(TESTING_DIR), $(addsuffix .c, $(TESTING_FILES)))
 
 TESTING_BUILD_DIR		:=	.tests/
@@ -33,7 +35,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(AR) $(ARFLAGS) $@ $^
 
-$(BUILD_DIR)%.o: $(SOURCE_DIR)%.s Makefile | $(DIRS)
+$(BUILD_DIR)%.o: $(SOURCE_DIR)%.s $(SOURCE_DIR)ft_libasm.h Makefile | $(DIRS)
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
 $(DIRS):
@@ -63,7 +65,7 @@ $(TESTING_NAME): $(TESTING_OBJ) $(NAME)
 	$(CC) $(CFLAGS) $(TESTING_OBJ) $(NAME) -o $(TESTING_NAME)
 
 $(TESTING_BUILD_DIR)%.o: $(TESTING_DIR)%.c Makefile $(TESTING_HEADERS) | $(DIRS)
-	$(CC) $(CFLAGS) -c -I$(TESTING_DIR) $< -o $@
+	$(CC) $(CFLAGS) -c -I$(TESTING_DIR) -I$(SOURCE_DIR) $< -o $@
 
 .PHONY: run
 run:
@@ -83,7 +85,7 @@ vg:
 
 .PHONY: norm
 norm:
-	norminette $(TESTING_DIR)
+	norminette $(TESTING_DIR) $(SOURCE_DIR)
 
 .PHONY: clean
 clean:

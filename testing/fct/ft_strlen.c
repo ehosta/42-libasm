@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/27 13:40:42 by ehosta            #+#    #+#             */
-/*   Updated: 2025/06/27 19:54:30 by ehosta           ###   ########.fr       */
+/*   Created: 2025/06/30 16:50:27 by ehosta            #+#    #+#             */
+/*   Updated: 2025/06/30 17:32:21 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "testing.h"
 
-void	display_title(void)
+int	ft_strlen_test(void)
 {
-	printf(COLOR_RED "# --------------------------------- #" COLOR_RESET "\n");
-	printf(COLOR_RED "#           LIBASM TESTS            #" COLOR_RESET "\n");
-	printf(COLOR_RED "# --------------------------------- #" COLOR_RESET "\n");
-	fflush(stdout);
-}
+	const char	s[] = "Ceci est un test";
 
-void	display_subtitle(const char *str)
-{
-	printf(COLOR_BLUE "\n(+) %s" COLOR_RESET "\n\n", str);
-	fflush(stdout);
+	printf("'%s': %zu\n", s, ft_strlen(s));
+	return (1);
 }
