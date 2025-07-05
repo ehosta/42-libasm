@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 16:50:27 by ehosta            #+#    #+#             */
-/*   Updated: 2025/06/30 17:32:21 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/07/02 10:29:08 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,20 @@
 
 int	ft_strlen_test(void)
 {
-	const char	s[] = "Ceci est un test";
+	size_t	i;
+	char*	s;
+	size_t	len;
+	size_t	lib_len;
 
-	printf("'%s': %zu\n", s, ft_strlen(s));
+	i = -1;
+	while (++i < 20)
+	{
+		s = random_seq(10, 32);
+		if (!s)
+			return (1);
+		lib_len = strlen(s);
+		printf("Test %zu\t" COLOR_GREEN "%zu" COLOR_YELLOW "\t%s" COLOR_RESET "\n", ft_strlen(s), s);
+		free(s);
+	}
 	return (1);
 }
