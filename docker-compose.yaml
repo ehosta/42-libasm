@@ -1,0 +1,13 @@
+name: libasm
+
+services:
+    libasm:
+        image: platformed-libasm
+        build:
+            context: .
+        platform: linux/amd64
+        container_name: platformed-libasm
+        working_dir: /app
+        stdin_open: true
+        tty: true
+        restart: no

@@ -1,36 +1,86 @@
-NAME	:=	libasm.a
+NAME = libasm.a
+NAME_BONUS = libasm_bonus.a
 
-override SOURCE_DIR		:=	src/
-SOURCE_FILES			:=	ft_strlen ft_strcpy
-override SOURCE			:=	$(addprefix $(SOURCE_DIR), $(addsuffix .s, $(SOURCE_FILES)))
+SOURCE_DIR = src/
+MANDATORY_DIR = $(SOURCE_DIR)mandatory/
+BONUS_DIR = $(SOURCE_DIR)bonus/
+MANDATORY_FILES = ft_strcpy ft_strlen
+BONUS_FILES =
 
-BUILD_DIR		:=	.dist/
-override OBJ	:=	$(patsubst $(SOURCE_DIR)%.s, $(BUILD_DIR)%.o, $(SOURCE))
+SOURCE = $(addprefix $(MANDATORY_DIR), $(addsuffix .s, $(MANDATORY_FILES)))
+SOURCE_BONUS = $(addprefix $(BONUS_DIR), $(addsuffix .s, $(BONUS_FILES)))
+BUILD_DIR = .dist/
+BUILD_DIR_BONUS = .dist_bonus/
+OBJECTS = $(patsubst $(MANDATORY_DIR)%.s, $(BUILD_DIR)%.o, $(SOURCE))
+OBJECTS_BONUS = $(patsubst $(BONUS_DIR)%.s, $(BUILD_DIR_BONUS)%.o, $(SOURCE_BONUS))
 
-override DIRS	:=	$(sort $(dir $(NAME) $(OBJ)))
+DIRS = $(sort $(dir $(OBJECTS)))
+DIRS_BONUS = $(sort $(dir $(OBJECTS_BONUS)))
 
-ASM			:=	nasm
-AR			:=	ar
-ASMFLAGS	:=	-f elf64
-ARFLAGS		:=	rcs
-LDFLAGS		:=
-RM			:=	rm -rf
+MAKEFLAGS = --no-print-directory
+ASM = nasm
+AR = ar
+ASMFLAGS = -f elf64
+ARFLAGS = rcs
+LDFLAGS =
+RM = rm -rf
 
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJECTS)
 	$(AR) $(ARFLAGS) $@ $^
 
-$(BUILD_DIR)%.o: $(SOURCE_DIR)%.s $(SOURCE_DIR)ft_libasm.h Makefile | $(DIRS)
+$(BUILD_DIR)%.o: $(MANDATORY_DIR)%.s Makefile | $(DIRS)
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
 $(DIRS):
 	@mkdir -p $@
 
 .PHONY: bonus
-bonus: all
+bonus: $(NAME_BONUS)
+
+$(NAME_BONUS): $(OBJECTS_BONUS)
+	$(AR) $(ARFLAGS) $@ $^
+
+$(BUILD_DIR_BONUS)%.o: $(BONUS_DIR)%.o Makefile | $(DIRS_BONUS)
+	$(ASM) $(ASMFLAGS) -o $@ $<
+
+$(DIRS_BONUS):
+	@mkdir -p $@
 
 .PHONY: re
 re: fclean
 	$(MAKE)
+	$(MAKE) bonus
+
+.PHONY: run
+run: fclean
+	docker compose build
+	docker compose up -d
+	docker compose exec libasm bash
+
+.PHONY: brun
+brun: fclean
+	docker compose build
+	docker compose up -d
+	docker compose exec libasm bash
+
+.PHONY: clean
+clean:
+	$(RM) $(BUILD_DIR) $(BUILD_DIR_BONUS)
+	$(MAKE) clean -C ./tests/
+
+.PHONY: fclean
+fclean: clean
+	docker compose down --rmi all || true
+#	docker builder prune -a -f || true
+	$(RM) $(NAME) $(NAME_BONUS)
+	$(MAKE) fclean -C ./tests/
+
+.PHONY: prune
+prune: fclean
+	docker builder prune -a -f || true
+
+print-%:
+	@printf '%s' "$($*)"
