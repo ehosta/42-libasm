@@ -54,17 +54,13 @@ re: fclean
 	$(MAKE)
 	$(MAKE) bonus
 
-.PHONY: run
-run: fclean
-	docker compose build
-	docker compose up -d
-	docker compose exec libasm bash
+.PHONY: build
+build:
+	docker build --platform=linux/amd64 -t libasm .
 
-.PHONY: brun
-brun: fclean
-	docker compose build
-	docker compose up -d
-	docker compose exec libasm bash
+.PHONY: run
+run:
+	docker run --platform=linux/amd64 -v "$(PWD)":/app -w /app -it libasm bash
 
 .PHONY: clean
 clean:
@@ -73,8 +69,6 @@ clean:
 
 .PHONY: fclean
 fclean: clean
-	docker compose down --rmi all || true
-#	docker builder prune -a -f || true
 	$(RM) $(NAME) $(NAME_BONUS)
 	$(MAKE) fclean -C ./tests/
 
