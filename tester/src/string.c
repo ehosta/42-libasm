@@ -1,12 +1,17 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
 #include <stdbool.h>
 #include <memory.h>
+#include <stdio.h>
+#include <string.h>
 
 static inline __attribute__((always_inline))
 void	build_ascii_table(const unsigned char *charset, bool table[256])
 {
 	for (size_t	i = 0; i < 256; ++i)
 		table[i] = false;
+	if (charset == NULL)
+		return;
 	for (size_t	i = 0; charset[i]; ++i)
 		table[charset[i]] = true;
 }
@@ -62,5 +67,21 @@ char	**split(const unsigned char *str, const unsigned char *charset)
 		while (*str && ascii_table[(unsigned char)*str])
 			str++;
 	}
+	return res;
+}
+
+char	*join(const char *s1, const char *s2)
+{
+	if (s1 == NULL)
+		return strdup(s2);
+	if (s2 == NULL)
+		return strdup(s1);
+	size_t	len1 = strlen(s1), len2 = strlen(s2);
+	char	*res = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (res == NULL)
+		return NULL;
+	memcpy(res, s1, len1);
+	memcpy(res + len1, s2, len2);
+	res[len1 + len2] = 0;
 	return res;
 }

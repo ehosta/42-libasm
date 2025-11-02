@@ -3,7 +3,7 @@ NAME = libasm_insider
 HEADER_DIR = include/
 SOURCE_DIR = src/
 HEADER_FILES = insider
-SOURCE_FILES = main string
+SOURCE_FILES = main string subprocess
 
 HEADER = $(addsuffix .h, $(addprefix $(HEADER_DIR), $(HEADER_FILES)))
 SOURCE = $(addsuffix .c, $(addprefix $(SOURCE_DIR), $(SOURCE_FILES)))
@@ -19,7 +19,7 @@ CC = clang
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -Wshadow -g3 -std=c99 -MMD -MP
 RM = rm -rf
 VG = valgrind
-VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes
+VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=make.supp
 
 .PHONY: all
 all: $(NAME)

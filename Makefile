@@ -65,12 +65,12 @@ run:
 .PHONY: clean
 clean:
 	$(RM) $(BUILD_DIR) $(BUILD_DIR_BONUS)
-	$(MAKE) clean -C ./tests/
+	$(MAKE) clean -C ./tester/
 
 .PHONY: fclean
 fclean: clean
 	$(RM) $(NAME) $(NAME_BONUS)
-	$(MAKE) fclean -C ./tests/
+	$(MAKE) fclean -C ./tester/
 
 .PHONY: prune
 prune: fclean
