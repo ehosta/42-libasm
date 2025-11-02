@@ -99,7 +99,11 @@ int	exec(const char *binary, char *const *argv, char *const *envp)
 int	compile_test(ProjectType_t type, char *const *envp)
 {
 	int		status;
-	char	**av = NULL;
+	char	**av = split("make -C ../ clean", " ");
+	status = exec("make", (char *const *)av, envp);
+	free_strs(av);
+	if (status != 0)
+		return status;
 	if (type == LIBASM_MANDATORY)
 		av = split("make -C ../ all", " ");
 	else
@@ -111,5 +115,6 @@ int	compile_test(ProjectType_t type, char *const *envp)
 	char	*linking_cmd = load_linking_command(LIBASM_MANDATORY);
 	av = split(linking_cmd, " ");
 	status = exec("clang", (char *const *)av, envp);
+	free_strs(av);
 	return status;
 }
