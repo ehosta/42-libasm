@@ -1,6 +1,8 @@
+#define _POSIX_C_SOURCE 200809L
 #include "insider.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -12,6 +14,30 @@ char	*join_with_sep(const char *path, const char *binary)
 	if (path_sep != NULL)
 		free(path_sep);
 	return path_sep_bin;
+}
+
+static inline __attribute__((always_inline))
+char	*load_linking_command(ProjectType_t type)
+{
+	char	*libname = NULL, *testname = NULL;
+	if (type == LIBASM_MANDATORY)
+	{
+		libname = strdup("../libasm.a");
+		testname = strdup(" unit/mandatory.c");
+	}
+	else
+	{
+		libname = strdup("../libasm_bonus.a");
+		testname = strdup(" unit/bonus.c");
+	}
+	char	*clang_lib = join(COMPILATION_FLAGS, libname);
+	char	*clang_lib_test = join(clang_lib, testname);
+	char	*final = join(clang_lib_test, " -o unit_test");
+	if (clang_lib != NULL)
+		free(clang_lib);
+	if (clang_lib_test != NULL)
+		free(clang_lib_test);
+	return final;
 }
 
 static inline __attribute__((always_inline))
@@ -70,7 +96,7 @@ int	exec(const char *binary, char *const *argv, char *const *envp)
 	return status;
 }
 
-int	compile_libasm(ProjectType_t type, char *const *envp)
+int	compile_test(ProjectType_t type, char *const *envp)
 {
 	int		status;
 	char	**av = NULL;
@@ -81,6 +107,9 @@ int	compile_libasm(ProjectType_t type, char *const *envp)
 	status = exec("make", (char *const *)av, envp);
 	free_strs(av);
 	if (status != 0)
-		return -1;
+		return status;
+	char	*linking_cmd = load_linking_command(LIBASM_MANDATORY);
+	av = split(linking_cmd, " ");
+	status = exec("clang", (char *const *)av, envp);
 	return status;
 }

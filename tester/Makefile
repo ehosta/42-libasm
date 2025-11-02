@@ -52,5 +52,6 @@ clean:
 .PHONY: fclean
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) unit_test
 
 -include $(DEPS)
