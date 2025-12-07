@@ -25,14 +25,19 @@ ARFLAGS = rcs
 LDFLAGS =
 RM = rm -rf
 
+RESET = \e[0m
+YELLOW = \e[38;2;255;224;112m [LIBASM] \
+
 .PHONY: all
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(AR) $(ARFLAGS) $@ $^
+	@printf "$(YELLOW)❭ Linking$(RESET)\n"
+	@$(AR) $(ARFLAGS) $@ $^
 
 $(BUILD_DIR)%.o: $(MANDATORY_DIR)%.s Makefile | $(DIRS)
-	$(ASM) $(ASMFLAGS) -o $@ $<
+	@printf "$(YELLOW)❭ Compiling $<$(RESET)\n"
+	@$(ASM) $(ASMFLAGS) -o $@ $<
 
 $(DIRS):
 	@mkdir -p $@
@@ -41,38 +46,45 @@ $(DIRS):
 bonus: $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJECTS_BONUS)
-	$(AR) $(ARFLAGS) $@ $^
+	@printf "$(YELLOW)❭ Linking bonus$(RESET)\n"
+	@$(AR) $(ARFLAGS) $@ $^
 
 $(BUILD_DIR_BONUS)%.o: $(BONUS_DIR)%.o Makefile | $(DIRS_BONUS)
-	$(ASM) $(ASMFLAGS) -o $@ $<
+	@printf "$(YELLOW)❭ Compiling bonus $<$(RESET)\n"
+	@$(ASM) $(ASMFLAGS) -o $@ $<
 
 $(DIRS_BONUS):
 	@mkdir -p $@
 
 .PHONY: re
 re: fclean
-	$(MAKE)
-	$(MAKE) bonus
+	@$(MAKE)
+	@$(MAKE) bonus
 
 .PHONY: build
 build:
-	docker build --platform=linux/amd64 -t libasm .
+	@printf "$(YELLOW)❭ Building Docker$(RESET)\n"
+	@docker build --platform=linux/amd64 -t libasm .
 
 .PHONY: run
 run:
-	docker run --platform=linux/amd64 -v "$(PWD)":/app -w /app -it libasm bash
+	@printf "$(YELLOW)❭ Running Docker$(RESET)\n"
+	@docker run --platform=linux/amd64 -v "$(PWD)":/app -w /app -it libasm bash
 
 .PHONY: clean
 clean:
-	$(RM) $(BUILD_DIR) $(BUILD_DIR_BONUS)
+	@printf "$(YELLOW)❭ Cleaning project$(RESET)\n"
+	@$(RM) $(BUILD_DIR) $(BUILD_DIR_BONUS)
 
 .PHONY: fclean
 fclean: clean
-	$(RM) $(NAME) $(NAME_BONUS)
+	@printf "$(YELLOW)❭ Full cleaning project$(RESET)\n"
+	@$(RM) $(NAME) $(NAME_BONUS)
 
 .PHONY: prune
 prune: fclean
-	docker builder prune -a -f || true
+	@printf "$(YELLOW)❭ Pruning Docker$(RESET)\n"
+	@docker builder prune -a -f || true
 
 print-%:
 	@printf '%s' "$($*)"
