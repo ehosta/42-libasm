@@ -13,5 +13,6 @@ void	free_strs(char **strs);
 char	**split(const char *str, const char *charset);
 char	*join(const char *s1, const char *s2);
 int		compile_test(ProjectType_t type, char *const *envp);
+int		run_test(char *const *envp);
 
 #endif

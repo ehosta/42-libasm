@@ -21,7 +21,6 @@ int	main(int argc, char **argv, char **envp)
 		return 1;
 	}
 	compile_test(type, envp);
-	(void)argc;
-	(void)argv;
+	run_test(envp);
 	return 0;
 }

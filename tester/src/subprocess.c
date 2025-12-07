@@ -22,21 +22,25 @@ char	*load_linking_command(ProjectType_t type)
 	char	*libname = NULL, *testname = NULL;
 	if (type == LIBASM_MANDATORY)
 	{
-		libname = strdup("../libasm.a");
-		testname = strdup(" unit/mandatory.c");
+		testname = strdup("unit/mandatory.c");
+		libname = strdup(" ../libasm.a");
 	}
 	else
 	{
-		libname = strdup("../libasm_bonus.a");
-		testname = strdup(" unit/bonus.c");
+		testname = strdup("unit/bonus.c");
+		libname = strdup(" ../libasm_bonus.a");
 	}
-	char	*clang_lib = join(COMPILATION_FLAGS, libname);
-	char	*clang_lib_test = join(clang_lib, testname);
+	char	*clang_lib = join(COMPILATION_FLAGS, testname);
+	char	*clang_lib_test = join(clang_lib, libname);
 	char	*final = join(clang_lib_test, " -o unit_test");
 	if (clang_lib != NULL)
 		free(clang_lib);
 	if (clang_lib_test != NULL)
 		free(clang_lib_test);
+	if (testname != NULL)
+		free(testname);
+	if (libname != NULL)
+		free(libname);
 	return final;
 }
 
@@ -45,6 +49,7 @@ void	execute_from_path(const char *binary, char *const *argv, char *const *envp)
 {
 	if (binary == NULL)
 		return;
+	execve(binary, argv, envp);
 	const char	*path = getenv("PATH");
 	char		**splitted_paths = NULL;
 	if (path != NULL)
@@ -99,7 +104,7 @@ int	exec(const char *binary, char *const *argv, char *const *envp)
 int	compile_test(ProjectType_t type, char *const *envp)
 {
 	int		status;
-	char	**av = split("make -C ../ clean", " ");
+	char	**av = split("make -C ../ fclean", " ");
 	status = exec("make", (char *const *)av, envp);
 	free_strs(av);
 	if (status != 0)
@@ -107,14 +112,24 @@ int	compile_test(ProjectType_t type, char *const *envp)
 	if (type == LIBASM_MANDATORY)
 		av = split("make -C ../ all", " ");
 	else
-		av = split("make -C ../ mandatory", " ");
+		av = split("make -C ../ bonus", " ");
 	status = exec("make", (char *const *)av, envp);
 	free_strs(av);
 	if (status != 0)
 		return status;
-	char	*linking_cmd = load_linking_command(LIBASM_MANDATORY);
+	char	*linking_cmd = load_linking_command(type);
 	av = split(linking_cmd, " ");
 	status = exec("clang", (char *const *)av, envp);
+	free_strs(av);
+	free(linking_cmd);
+	return status;
+}
+
+int	run_test(char *const *envp)
+{
+	int		status;
+	char	**av = split("./unit_test", " ");
+	status = exec("./unit_test", (char *const *)av, envp);
 	free_strs(av);
 	return status;
 }

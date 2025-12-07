@@ -25,10 +25,10 @@ void	free_strs(char **strs)
 	free(strs);
 }
 
-char	**split(const unsigned char *str, const unsigned char *charset)
+char	**split(const char *str, const char *charset)
 {
 	bool	ascii_table[256];
-	build_ascii_table(charset, ascii_table);
+	build_ascii_table((unsigned char *)charset, ascii_table);
 	while (*str && ascii_table[(unsigned char)*str])
 		str++;
 	if (!*str)
