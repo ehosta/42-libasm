@@ -1,11 +1,17 @@
-FROM ubuntu:latest
+FROM --platform=linux/amd64 alpine:3.20
 
-RUN apt-get update && \
-    apt-get install -y make gcc nasm valgrind clang tini && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+    make \
+    gcc \
+    musl-dev \
+    nasm \
+    valgrind \
+    clang \
+    tini
 
 ENV TERM=xterm
 
-COPY . /app
 WORKDIR /app
+COPY . /app
+
+ENTRYPOINT ["/sbin/tini", "--"]
