@@ -1,9 +1,6 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-extern size_t	ft_strlen(const char *s);
+extern size_t ft_strlen(const char *s);
 
-int	main(void)
-{
-	printf("Len: %ld\n", ft_strlen("Hello world!"));
-}
+int main(void) { printf("Len: %ld\n", ft_strlen("Hello world!")); }

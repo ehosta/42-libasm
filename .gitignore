@@ -2,3 +2,4 @@
 .dist
 .objects
 .deps
+.cache
