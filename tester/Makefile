@@ -2,7 +2,7 @@ NAME = libasm_insider
 
 HEADER_DIR = include/
 SOURCE_DIR = src/
-HEADER_FILES = insider
+HEADER_FILES = insider unit
 SOURCE_FILES = main string subprocess
 
 HEADER = $(addsuffix .h, $(addprefix $(HEADER_DIR), $(HEADER_FILES)))

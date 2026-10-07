@@ -4,7 +4,7 @@ NAME_BONUS = libasm_bonus.a
 SOURCE_DIR = src/
 MANDATORY_DIR = $(SOURCE_DIR)mandatory/
 BONUS_DIR = $(SOURCE_DIR)bonus/
-MANDATORY_FILES = ft_strcmp ft_strcpy ft_strlen
+MANDATORY_FILES = ft_strlen
 BONUS_FILES =
 
 SOURCE = $(addprefix $(MANDATORY_DIR), $(addsuffix .s, $(MANDATORY_FILES)))
