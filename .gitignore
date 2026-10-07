@@ -3,3 +3,8 @@
 .objects
 .deps
 .cache
+*.a
+*.o
+*.out
+libasm_insider
+unit_test
