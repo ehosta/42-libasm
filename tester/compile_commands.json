@@ -1,6 +1,6 @@
 [
   {
-    "directory": "/home/ehosta/code/42-libasm/tester",
+    "directory": "/home/panda/code/42-libasm/tester",
     "arguments": [
       "clang",
       "-Wall",
@@ -23,7 +23,7 @@
     "file": "src/main.c"
   },
   {
-    "directory": "/home/ehosta/code/42-libasm/tester",
+    "directory": "/home/panda/code/42-libasm/tester",
     "arguments": [
       "clang",
       "-Wall",
@@ -46,7 +46,7 @@
     "file": "src/string.c"
   },
   {
-    "directory": "/home/ehosta/code/42-libasm/tester",
+    "directory": "/home/panda/code/42-libasm/tester",
     "arguments": [
       "clang",
       "-Wall",
