@@ -7,21 +7,9 @@ int main(int argc, char **argv, char **envp)
 	if (argc ^ 2)
 	{
 		printf("You must provide an argument. Usage: ./libasm_insider "
-			   "<mandatory|bonus>\n");
+			   "<mandatory|bonus|all|any function>\n");
 		return 1;
 	}
-	ProjectType_t type;
-	if (strcmp("mandatory", argv[1]) == 0)
-		type = LIBASM_MANDATORY;
-	else if (strcmp("bonus", argv[1]) == 0)
-		type = LIBASM_BONUS;
-	else
-	{
-		printf("You must provide an argument. Usage: ./libasm_insider "
-			   "<mandatory|bonus>\n");
-		return 1;
-	}
-	compile_test(type, envp);
-	run_test(envp);
+	Insider_t insider = {.functions = NULL};
 	return 0;
 }

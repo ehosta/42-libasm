@@ -126,7 +126,7 @@ check(const char *name, bool ok, const char *expr, const char *file, int line)
 #define ASSERT(name, expr) check((name), (expr), #expr, __FILE__, __LINE__)
 
 #define ASSERT_SAME(name, f, g, ...)                                           \
-	check((name), (f)(__VA_ARGS__) == (g)(__VA_ARGS__), #__VA_ARGS__,          \
+	check((#f " " name), (f)(__VA_ARGS__) == (g)(__VA_ARGS__), #__VA_ARGS__,   \
 		  __FILE__, __LINE__)
 
 #endif
