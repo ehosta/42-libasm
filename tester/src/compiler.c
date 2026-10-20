@@ -1,5 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
-#include "insider.h"
+#include "tester.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -16,8 +16,7 @@ join_with_sep(const char *path, const char *binary)
 	return path_sep_bin;
 }
 
-static inline __attribute__((always_inline)) char *
-load_linking_command(ProjectType_t type)
+static inline __attribute__((always_inline)) char *load_linking_command(type)
 {
 	char *libname = NULL, *testname = NULL;
 	if (type == LIBASM_MANDATORY)
@@ -101,7 +100,7 @@ exec(const char *binary, char *const *argv, char *const *envp)
 	return status;
 }
 
-int compile_test(ProjectType_t type, char *const *envp)
+int compile_test(const char *function, char *const *envp)
 {
 	int status;
 	char **av = split("make -C ../ fclean", " ");

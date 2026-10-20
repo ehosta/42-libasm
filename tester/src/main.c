@@ -1,4 +1,4 @@
-#include "insider.h"
+#include "tester.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -10,6 +10,10 @@ int main(int argc, char **argv, char **envp)
 			   "<mandatory|bonus|all|any function>\n");
 		return 1;
 	}
-	Insider_t insider = {.functions = NULL};
+	Tester_t insider = {.fcts_to_test = NULL, .fcts_count = 0};
 	return 0;
 }
+
+char *name;
+int state; // 0 = mandatory  1 = bonus
+void *funcptr;

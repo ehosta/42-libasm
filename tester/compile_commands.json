@@ -1,71 +1,71 @@
 [
-  {
-    "directory": "/home/panda/code/42-libasm/tester",
-    "arguments": [
-      "clang",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-Wpedantic",
-      "-Wshadow",
-      "-g3",
-      "-std=c99",
-      "-MMD",
-      "-MP",
-      "-MF",
-      ".deps//main.d",
-      "-Iinclude/",
-      "-c",
-      "src/main.c",
-      "-o",
-      ".objects/main.o"
-    ],
-    "file": "src/main.c"
-  },
-  {
-    "directory": "/home/panda/code/42-libasm/tester",
-    "arguments": [
-      "clang",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-Wpedantic",
-      "-Wshadow",
-      "-g3",
-      "-std=c99",
-      "-MMD",
-      "-MP",
-      "-MF",
-      ".deps//string.d",
-      "-Iinclude/",
-      "-c",
-      "src/string.c",
-      "-o",
-      ".objects/string.o"
-    ],
-    "file": "src/string.c"
-  },
-  {
-    "directory": "/home/panda/code/42-libasm/tester",
-    "arguments": [
-      "clang",
-      "-Wall",
-      "-Wextra",
-      "-Werror",
-      "-Wpedantic",
-      "-Wshadow",
-      "-g3",
-      "-std=c99",
-      "-MMD",
-      "-MP",
-      "-MF",
-      ".deps//subprocess.d",
-      "-Iinclude/",
-      "-c",
-      "src/subprocess.c",
-      "-o",
-      ".objects/subprocess.o"
-    ],
-    "file": "src/subprocess.c"
-  }
+ {
+  "directory": "/home/ehosta/code/42-libasm/tester",
+  "arguments": [
+   "clang",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-Wpedantic",
+   "-Wshadow",
+   "-g3",
+   "-std=c99",
+   "-MMD",
+   "-MP",
+   "-MF",
+   ".deps//main.d",
+   "-Iinclude/",
+   "-c",
+   "src/main.c",
+   "-o",
+   ".objects/main.o"
+  ],
+  "file": "src/main.c"
+ },
+ {
+  "directory": "/home/ehosta/code/42-libasm/tester",
+  "arguments": [
+   "clang",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-Wpedantic",
+   "-Wshadow",
+   "-g3",
+   "-std=c99",
+   "-MMD",
+   "-MP",
+   "-MF",
+   ".deps//string.d",
+   "-Iinclude/",
+   "-c",
+   "src/string.c",
+   "-o",
+   ".objects/string.o"
+  ],
+  "file": "src/string.c"
+ },
+ {
+  "directory": "/home/ehosta/code/42-libasm/tester",
+  "arguments": [
+   "clang",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-Wpedantic",
+   "-Wshadow",
+   "-g3",
+   "-std=c99",
+   "-MMD",
+   "-MP",
+   "-MF",
+   ".deps//subprocess.d",
+   "-Iinclude/",
+   "-c",
+   "src/subprocess.c",
+   "-o",
+   ".objects/subprocess.o"
+  ],
+  "file": "src/subprocess.c"
+ }
 ]
