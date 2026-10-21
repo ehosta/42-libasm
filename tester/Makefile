@@ -26,7 +26,7 @@ VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mis
 RESET = \e[0m
 PURPLE = \e[38;2;164;112;255m [TESTER] \
 
-ARGS = ft_strlen
+ARGS = all
 
 .PHONY: all
 all: $(NAME)
@@ -54,7 +54,7 @@ run: fclean all
 .PHONY: vg
 vg: fclean all
 	@printf "$(PURPLE)❭ Running with Valgrind$(RESET)\n"
-	$(VG) $(VGFLAGS) ./$(NAME) $(ARGS)
+	@$(VG) $(VGFLAGS) ./$(NAME) $(ARGS)
 
 .PHONY: clean
 clean:
@@ -65,7 +65,6 @@ clean:
 .PHONY: fclean
 fclean: clean
 	@printf "$(PURPLE)❭ Full cleaning project$(RESET)\n"
-	@$(RM) $(NAME) unit_test
 	@$(MAKE) fclean -C ../
 
 -include $(DEPS)

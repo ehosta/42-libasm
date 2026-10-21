@@ -4,8 +4,6 @@
 #include <string.h>
 #include <sys/types.h>
 
-static uint16_t s_has_run = 0;
-
 static inline __attribute__((always_inline)) bool is_valid(const char *arg)
 {
 	if (strcmp(arg, "mandatory") == 0 || strcmp(arg, "bonus") == 0 ||
@@ -39,10 +37,10 @@ static inline __attribute__((always_inline)) void execute_arg(const char *arg,
 			continue;
 		if (type == BONUS && !functions[i].is_bonus)
 			continue;
-		if (s_has_run & 1 << (functions[i].id + 1))
+		if (s_has_run & (1 << (functions[i].id + 1)))
 			continue;
+		s_has_run |= 1 << (functions[i].id + 1);
 		compile_test(&functions[i], envp);
-		s_has_run &= 1 << (functions[i].id + 1);
 	}
 }
 

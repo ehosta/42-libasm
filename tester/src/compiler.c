@@ -59,9 +59,9 @@ exec_custom(const char *binary, char *const *argv, char *const *envp)
 		int dupfd = dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
 		if (dupfd == -1)
-			return -1;
+			exit(-1);
 		execute_from_path(binary, argv, envp);
-		return -1;
+		exit(-1);
 	}
 	close(pipe_fd[1]);
 	char buffer[1024];

@@ -7,6 +7,8 @@
 
 #define COMPILATION_FLAGS "clang -Wall -Wextra -Werror -Wpedantic -Wshadow -g3 "
 
+static uint16_t s_has_run = 0;
+
 typedef enum FunctionID
 {
 	FT_STRLEN,
