@@ -68,7 +68,7 @@ build:
 .PHONY: run
 run:
 	@printf "$(YELLOW)❭ Running Docker$(RESET)\n"
-	@docker run --platform=linux/amd64 -v "$(PWD)":/app -w /app -it libasm bash
+	@docker run --platform=linux/amd64 -v "$(PWD)":/app -w /app -it libasm sh
 
 .PHONY: clean
 clean:

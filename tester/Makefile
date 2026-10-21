@@ -25,6 +25,8 @@ VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mis
 RESET = \e[0m
 PURPLE = \e[38;2;164;112;255m [TESTER] \
 
+ARGS = ft_strlen ft_strcpy
+
 .PHONY: all
 all: $(NAME)
 
@@ -45,23 +47,13 @@ re: fclean
 
 .PHONY: run
 run: fclean all
-	@printf "$(PURPLE)❭ Running mandatory$(RESET)\n"
-	@./$(NAME) ft_strlen
-
-.PHONY: brun
-brun: fclean all
-	@printf "$(PURPLE)❭ Running bonus$(RESET)\n"
-	@./$(NAME) bonus
+	@printf "$(PURPLE)❭ Running$(RESET)\n"
+	@./$(NAME) $(ARGS)
 
 .PHONY: vg
 vg: fclean all
-	@printf "$(PURPLE)❭ Running mandatory with Valgrind$(RESET)\n"
-	@$(VG) $(VGFLAGS) ./$(NAME) ft_strlen
-
-.PHONY: bvg
-bvg: fclean all
-	@printf "$(PURPLE)❭ Running bonus with Valgrind$(RESET)\n"
-	@$(VG) $(VGFLAGS) ./$(NAME) bonus
+	@printf "$(PURPLE)❭ Running with Valgrind$(RESET)\n"
+	@$(VG) $(VGFLAGS) ./$(NAME) $(ARGS)
 
 .PHONY: clean
 clean:
