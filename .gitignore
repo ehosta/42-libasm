@@ -7,4 +7,4 @@
 *.o
 *.out
 libasm_insider
-unit_test
+.tests

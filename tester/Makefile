@@ -12,6 +12,7 @@ OBJECTS = $(patsubst $(SOURCE_DIR)%.c, $(BUILD_DIR)%.o, $(SOURCE))
 DEPS_DIR = .deps/
 DEPS = $(patsubst $(SOURCE_DIR)%.c, $(DEPS_DIR)%.d, $(SOURCE))
 TESTS_DIR = .tests/
+CACHE_DIR = .cache
 
 DIRS = $(sort $(dir $(OBJECTS) $(DEPS)))
 
@@ -58,7 +59,7 @@ vg: fclean all
 .PHONY: clean
 clean:
 	@printf "$(PURPLE)❭ Cleaning project$(RESET)\n"
-	@$(RM) $(BUILD_DIR) $(DEPS_DIR) $(TESTS_DIR)
+	@$(RM) $(BUILD_DIR) $(DEPS_DIR) $(TESTS_DIR) $(CACHE_DIR)
 	@$(MAKE) clean -C ../
 
 .PHONY: fclean
