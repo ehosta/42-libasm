@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "tester.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -76,14 +77,15 @@ exec_custom(const char *binary, char *const *argv, char *const *envp)
 int exec(const char *cmd, char *const *envp)
 {
 	int status;
+
 	char **av = split(cmd, " ");
 	status = exec_custom(av[0], (char *const *)av, envp);
 	free_strs(av);
 	return status;
 }
 
-static inline __attribute__((always_inline)) char *
-load_linking_command(const Function_t *fct)
+static inline __attribute__((always_inline)) void
+load_linking_command(const Function_t *fct, char *const *envp)
 {
 	char *libname = NULL;
 	if (!fct->is_bonus)
@@ -96,8 +98,8 @@ load_linking_command(const Function_t *fct)
 
 	char *clang_lib = join(COMPILATION_FLAGS, testname);
 	char *clang_lib_test = join(clang_lib, libname);
-	char *clang_output = join(" -o test_", fct->name);
-	char *final = join(clang_lib_test, " -o unit_test");
+	char *clang_output = join(" -o ./.tests/test_", fct->name);
+	char *final = join(clang_lib_test, clang_output);
 
 	if (libname != NULL)
 		free(libname);
@@ -114,7 +116,12 @@ load_linking_command(const Function_t *fct)
 	if (clang_output != NULL)
 		free(clang_output);
 
-	return final;
+	exec(final, envp);
+	free(final);
+
+	char *run_test = join("./.tests/test_", fct->name);
+	exec(run_test, envp);
+	free(run_test);
 }
 
 int compile_test(const Function_t *fct, char *const *envp)
@@ -133,8 +140,6 @@ int compile_test(const Function_t *fct, char *const *envp)
 	if (status != 0)
 		return status;
 
-	char *linking_cmd = load_linking_command(fct);
-	status = exec(linking_cmd, envp);
-	free(linking_cmd);
+	load_linking_command(fct, envp);
 	return status;
 }

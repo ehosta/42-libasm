@@ -65,6 +65,5 @@ int run_battery(int argc, char **argv, char *const *envp);
 
 int exec(const char *cmd, char *const *envp);
 int compile_test(const Function_t *fct, char *const *envp);
-int run_test(char *const *envp);
 
 #endif

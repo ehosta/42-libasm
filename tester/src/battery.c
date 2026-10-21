@@ -24,11 +24,11 @@ static inline __attribute__((always_inline)) void execute_arg(const char *arg,
 {
 	CheckType_t type = CUSTOM;
 
-	if (strcmp(arg, "mandatory"))
+	if (strcmp(arg, "mandatory") == 0)
 		type = MANDATORY;
-	if (strcmp(arg, "bonus"))
+	if (strcmp(arg, "bonus") == 0)
 		type = BONUS;
-	if (strcmp(arg, "all"))
+	if (strcmp(arg, "all") == 0)
 		type = ALL;
 
 	for (uint8_t i = 0; i < 12; ++i)
@@ -62,6 +62,7 @@ int run_battery(int argc, char **argv, char *const *envp)
 			}
 			execute_arg(arg, envp);
 		}
+		free_strs(split_input);
 	}
 	return 1;
 }

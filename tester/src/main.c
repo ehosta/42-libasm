@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv, char **envp)
 {
-	if (argc ^ 2)
+	if (argc < 2)
 	{
 		printf("You must provide an argument. Usage: ./libasm_insider "
 			   "<mandatory|bonus|all|any function>\n");
@@ -11,6 +11,7 @@ int main(int argc, char **argv, char **envp)
 	}
 	int status;
 	status = exec("make -C ../ fclean", envp);
+	status = exec("mkdir -p .tests/", envp);
 	if (status != 0)
 		return status;
 	run_battery(argc, argv, envp);
