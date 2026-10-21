@@ -1,3 +1,4 @@
+#include "error.h"
 #include "tester.h"
 #include <stdint.h>
 #include <string.h>
@@ -7,7 +8,8 @@ static uint16_t s_has_run = 0;
 
 static inline __attribute__((always_inline)) bool is_valid(const char *arg)
 {
-	if (strcmp(arg, "mandatory") == 0 || strcmp(arg, "bonus") == 0)
+	if (strcmp(arg, "mandatory") == 0 || strcmp(arg, "bonus") == 0 ||
+		strcmp(arg, "all") == 0)
 		return true;
 	for (uint8_t i = 0; i < 12; ++i)
 	{
@@ -17,17 +19,49 @@ static inline __attribute__((always_inline)) bool is_valid(const char *arg)
 	return false;
 }
 
-int run_battery(const char *input)
+static inline __attribute__((always_inline)) void execute_arg(const char *arg,
+															  char *const *envp)
 {
-	const char **split_input = split(input, " \t\r\n\v");
+	CheckType_t type = CUSTOM;
 
-	for (ssize_t i = 0; split_input[i]; ++i)
+	if (strcmp(arg, "mandatory"))
+		type = MANDATORY;
+	if (strcmp(arg, "bonus"))
+		type = BONUS;
+	if (strcmp(arg, "all"))
+		type = ALL;
+
+	for (uint8_t i = 0; i < 12; ++i)
 	{
-		const char *arg = split_input[i];
-		if (!is_valid(arg))
+		if (type == CUSTOM && strcmp(arg, functions[i].name) != 0)
+			continue;
+		if (type == MANDATORY && functions[i].is_bonus)
+			continue;
+		if (type == BONUS && !functions[i].is_bonus)
+			continue;
+		if (s_has_run & 1 << (functions[i].id + 1))
+			continue;
+		compile_test(&functions[i], envp);
+		s_has_run &= 1 << (functions[i].id + 1);
+	}
+}
+
+int run_battery(int argc, char **argv, char *const *envp)
+{
+	for (int i = 1; i < argc; ++i)
+	{
+		char **split_input = split(argv[i], " \t\r\n\v");
+
+		for (ssize_t j = 0; split_input[j]; ++j)
 		{
-			
-			return 1;
+			const char *arg = split_input[j];
+			if (!is_valid(arg))
+			{
+				errtype = E_INVALID_ARG;
+				return 0;
+			}
+			execute_arg(arg, envp);
 		}
 	}
+	return 1;
 }

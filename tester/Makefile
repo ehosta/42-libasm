@@ -2,8 +2,8 @@ NAME = libasm_insider
 
 HEADER_DIR = include/
 SOURCE_DIR = src/
-HEADER_FILES = tester unit
-SOURCE_FILES = main string subprocess
+HEADER_FILES = error tester unit
+SOURCE_FILES = battery compiler main string
 
 HEADER = $(addsuffix .h, $(addprefix $(HEADER_DIR), $(HEADER_FILES)))
 SOURCE = $(addsuffix .c, $(addprefix $(SOURCE_DIR), $(SOURCE_FILES)))
@@ -11,6 +11,7 @@ BUILD_DIR = .objects/
 OBJECTS = $(patsubst $(SOURCE_DIR)%.c, $(BUILD_DIR)%.o, $(SOURCE))
 DEPS_DIR = .deps/
 DEPS = $(patsubst $(SOURCE_DIR)%.c, $(DEPS_DIR)%.d, $(SOURCE))
+TESTS_DIR = .tests/
 
 DIRS = $(sort $(dir $(OBJECTS) $(DEPS)))
 
@@ -45,7 +46,7 @@ re: fclean
 .PHONY: run
 run: fclean all
 	@printf "$(PURPLE)❭ Running mandatory$(RESET)\n"
-	@./$(NAME) mandatory
+	@./$(NAME) ft_strlen
 
 .PHONY: brun
 brun: fclean all
@@ -55,7 +56,7 @@ brun: fclean all
 .PHONY: vg
 vg: fclean all
 	@printf "$(PURPLE)❭ Running mandatory with Valgrind$(RESET)\n"
-	@$(VG) $(VGFLAGS) ./$(NAME) mandatory
+	@$(VG) $(VGFLAGS) ./$(NAME) ft_strlen
 
 .PHONY: bvg
 bvg: fclean all
@@ -65,7 +66,7 @@ bvg: fclean all
 .PHONY: clean
 clean:
 	@printf "$(PURPLE)❭ Cleaning project$(RESET)\n"
-	@$(RM) $(BUILD_DIR) $(DEPS_DIR)
+	@$(RM) $(BUILD_DIR) $(DEPS_DIR) $(TESTS_DIR)
 	@$(MAKE) clean -C ../
 
 .PHONY: fclean

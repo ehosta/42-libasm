@@ -1,6 +1,5 @@
 #include "tester.h"
 #include <stdio.h>
-#include <string.h>
 
 int main(int argc, char **argv, char **envp)
 {
@@ -10,10 +9,10 @@ int main(int argc, char **argv, char **envp)
 			   "<mandatory|bonus|all|any function>\n");
 		return 1;
 	}
-	Tester_t insider = {.fcts_to_test = NULL, .fcts_count = 0};
+	int status;
+	status = exec("make -C ../ fclean", envp);
+	if (status != 0)
+		return status;
+	run_battery(argc, argv, envp);
 	return 0;
 }
-
-char *name;
-int state; // 0 = mandatory  1 = bonus
-void *funcptr;

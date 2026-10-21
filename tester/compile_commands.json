@@ -1,6 +1,6 @@
 [
  {
-  "directory": "/home/ehosta/code/42-libasm/tester",
+  "directory": "/home/panda/code/42-libasm/tester",
   "arguments": [
    "clang",
    "-Wall",
@@ -23,7 +23,7 @@
   "file": "src/main.c"
  },
  {
-  "directory": "/home/ehosta/code/42-libasm/tester",
+  "directory": "/home/panda/code/42-libasm/tester",
   "arguments": [
    "clang",
    "-Wall",
@@ -46,7 +46,7 @@
   "file": "src/string.c"
  },
  {
-  "directory": "/home/ehosta/code/42-libasm/tester",
+  "directory": "/home/panda/code/42-libasm/tester",
   "arguments": [
    "clang",
    "-Wall",
@@ -59,13 +59,36 @@
    "-MMD",
    "-MP",
    "-MF",
-   ".deps//subprocess.d",
+   ".deps//battery.d",
    "-Iinclude/",
    "-c",
-   "src/subprocess.c",
+   "src/battery.c",
    "-o",
-   ".objects/subprocess.o"
+   ".objects/battery.o"
   ],
-  "file": "src/subprocess.c"
+  "file": "src/battery.c"
+ },
+ {
+  "directory": "/home/panda/code/42-libasm/tester",
+  "arguments": [
+   "clang",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-Wpedantic",
+   "-Wshadow",
+   "-g3",
+   "-std=c99",
+   "-MMD",
+   "-MP",
+   "-MF",
+   ".deps//compiler.d",
+   "-Iinclude/",
+   "-c",
+   "src/compiler.c",
+   "-o",
+   ".objects/compiler.o"
+  ],
+  "file": "src/compiler.c"
  }
 ]
