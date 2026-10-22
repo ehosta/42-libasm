@@ -74,20 +74,18 @@ run:
 clean:
 	@printf "$(YELLOW)❭ Cleaning project$(RESET)\n"
 	@$(RM) $(BUILD_DIR) $(BUILD_DIR_BONUS)
+	@$(MAKE) clean -C tester
 
 .PHONY: fclean
 fclean: clean
 	@printf "$(YELLOW)❭ Full cleaning project$(RESET)\n"
 	@$(RM) $(NAME) $(NAME_BONUS)
+	@$(MAKE) fclean -C tester
 
 .PHONY: prune
 prune: fclean
 	@printf "$(YELLOW)❭ Pruning Docker$(RESET)\n"
 	@docker builder prune -a -f || true
-
-.PHONY: test
-test:
-	@$(MAKE) -C tester run
 
 print-%:
 	@printf '%s' "$($*)"

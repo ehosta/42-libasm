@@ -111,22 +111,19 @@ static inline __attribute__((always_inline, destructor)) void __clear_gc(void)
 // ASSERTING
 ///////////////////////////////////////
 
-static inline __attribute__((always_inline)) bool
-check(const char *name, bool ok, const char *expr, const char *file, int line)
+static inline __attribute__((always_inline)) bool check(const char *name,
+														bool ok)
 {
 	if (ok)
-		fprintf(stderr, "\033[0;32m%s:%d: OK: %s (%s)\033[0m\n", file, line,
-				name, expr);
+		fprintf(stderr, "\033[38;2;130;255;89mOK: %s\033[0m\n", name);
 	else
-		fprintf(stderr, "\033[0;31m%s:%d: FAIL: %s (%s)\033[0m\n", file, line,
-				name, expr);
+		fprintf(stderr, "\033[38;2;255;92;92mFAIL: %s\033[0m\n", name);
 	return ok;
 }
 
-#define ASSERT(name, expr) check((name), (expr), #expr, __FILE__, __LINE__)
+#define ASSERT(name, expr) check((name), (expr))
 
 #define ASSERT_SAME(name, f, g, ...)                                           \
-	check((#f " " name), (f)(__VA_ARGS__) == (g)(__VA_ARGS__), #__VA_ARGS__,   \
-		  __FILE__, __LINE__)
+	check((#f " " name), (f)(__VA_ARGS__) == (g)(__VA_ARGS__))
 
 #endif

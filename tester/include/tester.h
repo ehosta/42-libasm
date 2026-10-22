@@ -65,7 +65,7 @@ char *join(const char *s1, const char *s2);
 
 int run_battery(int argc, char **argv, char *const *envp);
 
-int exec(const char *cmd, char *const *envp);
+int exec(const char *cmd, char *const *envp, bool output);
 int compile_test(const Function_t *fct, char *const *envp);
 
 #endif

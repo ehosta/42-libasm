@@ -40,7 +40,8 @@ static inline __attribute__((always_inline)) void execute_arg(const char *arg,
 		if (s_has_run & (1 << (functions[i].id + 1)))
 			continue;
 		s_has_run |= 1 << (functions[i].id + 1);
-		compile_test(&functions[i], envp);
+		int status = compile_test(&functions[i], envp);
+		print_err(status, functions[i].name);
 	}
 }
 

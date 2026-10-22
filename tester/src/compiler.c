@@ -1,3 +1,4 @@
+#include "error.h"
 #define _POSIX_C_SOURCE 200809L
 #include "tester.h"
 #include <stdio.h>
@@ -40,8 +41,10 @@ execute_from_path(const char *binary, char *const *argv, char *const *envp)
 	free_strs(splitted_paths);
 }
 
-static inline __attribute__((always_inline)) int
-exec_custom(const char *binary, char *const *argv, char *const *envp)
+static inline __attribute__((always_inline)) int exec_custom(const char *binary,
+															 char *const *argv,
+															 char *const *envp,
+															 bool output)
 {
 	int pipe_fd[2];
 	if (pipe(pipe_fd) == -1)
@@ -56,7 +59,8 @@ exec_custom(const char *binary, char *const *argv, char *const *envp)
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
-		int dupfd = dup2(pipe_fd[1], STDOUT_FILENO);
+		int dupfd = dup2(pipe_fd[1], STDERR_FILENO);
+		dupfd = dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
 		if (dupfd == -1)
 			exit(-1);
@@ -67,24 +71,25 @@ exec_custom(const char *binary, char *const *argv, char *const *envp)
 	char buffer[1024];
 	int n;
 	while ((n = read(pipe_fd[0], buffer, sizeof(buffer))) > 0)
-		write(STDOUT_FILENO, buffer, n);
+		if (output)
+			write(STDOUT_FILENO, buffer, n);
 	close(pipe_fd[0]);
 	int status = 0;
 	waitpid(pid, &status, 0);
 	return status;
 }
 
-int exec(const char *cmd, char *const *envp)
+int exec(const char *cmd, char *const *envp, bool output)
 {
 	int status;
 
 	char **av = split(cmd, " ");
-	status = exec_custom(av[0], (char *const *)av, envp);
+	status = exec_custom(av[0], (char *const *)av, envp, output);
 	free_strs(av);
 	return status;
 }
 
-static inline __attribute__((always_inline)) void
+static inline __attribute__((always_inline)) int
 load_linking_command(const Function_t *fct, char *const *envp)
 {
 	char *libname = NULL;
@@ -116,30 +121,34 @@ load_linking_command(const Function_t *fct, char *const *envp)
 	if (clang_output != NULL)
 		free(clang_output);
 
-	exec(final, envp);
+	int status = exec(final, envp, false);
 	free(final);
+	if (status)
+		return E_TEST_NOT_FOUND;
 
 	char *run_test = join("./.tests/test_", fct->name);
-	exec(run_test, envp);
+	status = exec(run_test, envp, true);
 	free(run_test);
+	if (status)
+		return E_BROKEN_TEST;
+	return 0;
 }
 
 int compile_test(const Function_t *fct, char *const *envp)
 {
-	int status;
+	int status = 0;
 	if (fct->is_bonus && !bonus_enabled)
 	{
 		bonus_enabled = true;
-		status = exec("make -C ../ bonus", envp);
+		status = exec("make -C ../ bonus", envp, false);
 	}
 	if (!fct->is_bonus && !mandatory_enabled)
 	{
 		bonus_enabled = true;
-		status = exec("make -C ../ all", envp);
+		status = exec("make -C ../ all", envp, false);
 	}
-	if (status != 0)
+	if (status != 0 && status != 13)
 		return status;
 
-	load_linking_command(fct, envp);
-	return status;
+	return load_linking_command(fct, envp);
 }

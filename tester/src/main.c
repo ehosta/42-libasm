@@ -1,5 +1,6 @@
 #include "tester.h"
 #include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char **argv, char **envp)
 {
@@ -9,11 +10,7 @@ int main(int argc, char **argv, char **envp)
 			   "<mandatory|bonus|all|any function>\n");
 		return 1;
 	}
-	int status;
-	status = exec("make -C ../ fclean", envp);
-	status = exec("mkdir -p .tests/", envp);
-	if (status != 0)
-		return status;
+	write(1, "\n", 2);
 	run_battery(argc, argv, envp);
 	return 0;
 }
