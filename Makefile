@@ -49,7 +49,7 @@ $(NAME_BONUS): $(OBJECTS_BONUS)
 	@printf "$(YELLOW)❭ Linking bonus$(RESET)\n"
 	@$(AR) $(ARFLAGS) $@ $^
 
-$(BUILD_DIR_BONUS)%.o: $(BONUS_DIR)%.o Makefile | $(DIRS_BONUS)
+$(BUILD_DIR_BONUS)%.o: $(BONUS_DIR)%.s Makefile | $(DIRS_BONUS)
 	@printf "$(YELLOW)❭ Compiling bonus $<$(RESET)\n"
 	@$(ASM) $(ASMFLAGS) -o $@ $<
 
