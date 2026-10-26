@@ -6,5 +6,5 @@
 *.a
 *.o
 *.out
-libasm_insider
+*/libasm_insider
 .tests
