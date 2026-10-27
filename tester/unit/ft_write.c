@@ -386,7 +386,6 @@ static bool write_sequence(void)
 
 int main(void)
 {
-	printf("%ld\n", ft_write(1, ".", 1));
 	ASSERT("ft_write classic", write_pipe_ok("Hello World!", 12));
 	ASSERT("ft_write one byte", write_pipe_ok("a", 1));
 	ASSERT("ft_write embedded nul and high bytes",
