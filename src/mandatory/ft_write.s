@@ -11,8 +11,9 @@ ft_write:
 	ret
 
 .error:
-	; prologue
-	push	rbp, rsp
+	push	rbp
+	mov	rbp, rsp
+	sub	rsp, 8
 
 	neg	rax
 	push	rax
@@ -21,7 +22,7 @@ ft_write:
 	mov	[rax], edx
 	mov	rax, -1
 
-	; epilogue
-	mov	rbp, rsp
+	mov	rsp, rbp
+	pop	rbp
 
 	ret
