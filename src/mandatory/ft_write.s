@@ -11,10 +11,17 @@ ft_write:
 	ret
 
 .error:
+	; prologue
+	push	rbp, rsp
+
 	neg	rax
 	push	rax
 	call	__errno_location wrt ..plt
 	pop	rdx
 	mov	[rax], edx
 	mov	rax, -1
+
+	; epilogue
+	mov	rbp, rsp
+
 	ret
