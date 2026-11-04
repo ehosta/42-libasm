@@ -101,7 +101,11 @@ load_linking_command(const Function_t *fct, char *const *envp)
 	char *function_file = join(fct->name, ".c");
 	char *testname = join_with_sep("unit", function_file);
 
-	char *clang_lib = join(COMPILATION_FLAGS, testname);
+	char *clang_lib = NULL;
+	if (fct->enable_malloc)
+		clang_lib = join(COMPILATION_FLAGS_WITH_MALLOC, testname);
+	else
+		clang_lib = join(COMPILATION_FLAGS, testname);
 	char *clang_lib_test = join(clang_lib, libname);
 	char *clang_output = join(" -o ./.tests/test_", fct->name);
 	char *final = join(clang_lib_test, clang_output);

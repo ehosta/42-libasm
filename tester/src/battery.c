@@ -18,8 +18,8 @@ static inline __attribute__((always_inline)) bool is_valid(const char *arg)
 	return false;
 }
 
-static inline __attribute__((always_inline)) void execute_arg(const char *arg,
-															  char *const *envp)
+static inline __attribute__((always_inline)) void
+execute_arg(const char *arg, char *const *envp)
 {
 	CheckType_t type = CUSTOM;
 
