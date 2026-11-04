@@ -1,6 +1,7 @@
 #include "error.h"
 #include "tester.h"
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 
@@ -40,6 +41,7 @@ static inline __attribute__((always_inline)) void execute_arg(const char *arg,
 		if (s_has_run & (1 << (functions[i].id + 1)))
 			continue;
 		s_has_run |= 1 << (functions[i].id + 1);
+		printf("[ Testing %s ]\n", functions[i].name);
 		int status = compile_test(&functions[i], envp);
 		print_err(status, functions[i].name);
 	}

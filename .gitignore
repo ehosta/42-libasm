@@ -1,5 +1,6 @@
 .vscode
 .dist
+.dist_bonus
 .objects
 .deps
 .cache
